@@ -1,0 +1,1849 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FundFlow - The Ultimate Fundraising Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --indigo: #4f46e5;
+        --indigo-dark: #3730a3;
+        --indigo-light: #eef2ff;
+        --blue-soft: #dbeafe;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+      }
+      .font-display {
+        font-family: "Fraunces", serif;
+      }
+
+      /* Page routing */
+      .page {
+        display: none;
+      }
+      .page.active {
+        display: block;
+      }
+
+      /* Animations */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(24px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.6s ease forwards;
+      }
+      .fade-up-d1 {
+        animation: fadeUp 0.6s 0.1s ease both;
+      }
+      .fade-up-d2 {
+        animation: fadeUp 0.6s 0.2s ease both;
+      }
+      .fade-up-d3 {
+        animation: fadeUp 0.6s 0.3s ease both;
+      }
+      .fade-up-d4 {
+        animation: fadeUp 0.6s 0.4s ease both;
+      }
+      .float-anim {
+        animation: float 4s ease-in-out infinite;
+      }
+
+      /* Hero gradient bg */
+      .hero-bg {
+        background: linear-gradient(
+          135deg,
+          #eef2ff 0%,
+          #dbeafe 50%,
+          #ede9fe 100%
+        );
+      }
+      .hero-bg-dark {
+        background: linear-gradient(
+          135deg,
+          #1e1b4b 0%,
+          #1e3a5f 60%,
+          #312e81 100%
+        );
+      }
+
+      /* Feature card hover */
+      .feature-card {
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+      .feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(79, 70, 229, 0.12);
+      }
+
+      /* Pricing toggle */
+      .toggle-pill {
+        transition: background 0.3s ease;
+      }
+      .toggle-knob {
+        transition: transform 0.3s ease;
+      }
+
+      /* Popular badge shimmer */
+      .shimmer-badge {
+        background: linear-gradient(90deg, #4f46e5, #7c3aed, #4f46e5);
+        background-size: 200% 100%;
+        animation: shimmer 2.5s infinite;
+      }
+
+      /* Accordion */
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition:
+          max-height 0.4s ease,
+          padding 0.3s ease;
+      }
+      .accordion-content.open {
+        max-height: 300px;
+      }
+
+      /* Nav active state */
+      .nav-link {
+        transition: color 0.2s;
+      }
+      .nav-link.active {
+        color: #4f46e5;
+        font-weight: 600;
+      }
+
+      /* Contact input focus */
+      .contact-input:focus {
+        outline: none;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+      }
+
+      /* Resource card */
+      .resource-card {
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .resource-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Dotted bg pattern */
+      .dot-bg {
+        background-image: radial-gradient(circle, #c7d2fe 1px, transparent 1px);
+        background-size: 24px 24px;
+      }
+    </style>
+  </head>
+  <body class="bg-white">
+    <!-- ========== HEADER ========== -->
+    <header
+      class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <button
+            onclick="showPage('home')"
+            class="text-2xl font-bold text-indigo-600 font-display"
+          >
+            FundFlow
+          </button>
+          <nav class="hidden md:block">
+            <div class="ml-10 flex items-baseline space-x-2">
+              <button
+                onclick="showPage('features')"
+                class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+                id="nav-features"
+              >
+                Features
+              </button>
+              <button
+                onclick="showPage('home')"
+                class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+                id="nav-campaigns"
+              >
+                Campaigns
+              </button>
+              <button
+                onclick="showPage('pricing')"
+                class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+                id="nav-pricing"
+              >
+                Pricing
+              </button>
+              <button
+                onclick="showPage('resources')"
+                class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+                id="nav-resources"
+              >
+                Resources
+              </button>
+              <button
+                onclick="showPage('contact')"
+                class="nav-link text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+                id="nav-contact"
+              >
+                Contact
+              </button>
+            </div>
+          </nav>
+          <div class="flex items-center space-x-4">
+            <a
+              href="/login"
+              class="text-gray-600 hover:text-indigo-600 text-sm font-medium"
+              >Sign In</a
+            >
+            <a
+              href="/register"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >Start Fundraising</a
+            >
+          </div>
+          <!-- Mobile menu button -->
+          <button
+            class="md:hidden text-gray-600 hover:text-indigo-600 p-2"
+            onclick="toggleMobileMenu()"
+          >
+            <i data-lucide="menu" class="h-6 w-6"></i>
+          </button>
+        </div>
+        <!-- Mobile menu -->
+        <div
+          id="mobile-menu"
+          class="md:hidden hidden pb-4 border-t border-gray-100 mt-2"
+        >
+          <div class="flex flex-col space-y-1 pt-2">
+            <button
+              onclick="showPage('features')"
+              class="text-left text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+            >
+              Features
+            </button>
+            <button
+              onclick="showPage('home')"
+              class="text-left text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+            >
+              Campaigns
+            </button>
+            <button
+              onclick="showPage('pricing')"
+              class="text-left text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+            >
+              Pricing
+            </button>
+            <button
+              onclick="showPage('resources')"
+              class="text-left text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+            >
+              Resources
+            </button>
+            <button
+              onclick="showPage('contact')"
+              class="text-left text-gray-600 hover:text-indigo-600 px-3 py-2 text-sm font-medium"
+            >
+              Contact
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== HOME PAGE ========== -->
+    <div id="page-home" class="page active">
+      <section class="hero-bg py-24 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto text-center">
+          <h1
+            class="font-display text-5xl sm:text-6xl font-bold text-gray-900 leading-tight mb-6 fade-up"
+          >
+            Fund Your Dreams,<br /><span class="text-indigo-600 italic"
+              >Support Creators</span
+            >
+          </h1>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10 fade-up-d1">
+            The ultimate platform for creators to launch campaigns, connect with
+            supporters, and turn ideas into reality.
+          </p>
+          <div
+            class="flex flex-col sm:flex-row gap-4 justify-center fade-up-d2"
+          >
+            <button
+              onclick="showPage('features')"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-4 rounded-xl text-base font-semibold transition-colors shadow-lg shadow-indigo-200"
+            >
+              Start a Campaign
+            </button>
+            <button
+              onclick="showPage('features')"
+              class="border border-indigo-200 hover:border-indigo-400 text-indigo-600 px-8 py-4 rounded-xl text-base font-semibold transition-colors bg-white"
+            >
+              Explore Features →
+            </button>
+          </div>
+          <div class="mt-16 grid grid-cols-3 gap-8 max-w-lg mx-auto fade-up-d3">
+            <div>
+              <div class="font-display text-3xl font-bold text-indigo-600">
+                50K+
+              </div>
+              <div class="text-sm text-gray-500 mt-1">Projects Funded</div>
+            </div>
+            <div>
+              <div class="font-display text-3xl font-bold text-indigo-600">
+                $2B+
+              </div>
+              <div class="text-sm text-gray-500 mt-1">Total Raised</div>
+            </div>
+            <div>
+              <div class="font-display text-3xl font-bold text-indigo-600">
+                180+
+              </div>
+              <div class="text-sm text-gray-500 mt-1">Countries</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Quick nav cards -->
+      <section class="py-20 px-4 max-w-7xl mx-auto">
+        <h2
+          class="font-display text-3xl font-bold text-center text-gray-900 mb-12"
+        >
+          Everything you need to succeed
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div
+            onclick="showPage('features')"
+            class="feature-card cursor-pointer border border-gray-100 rounded-2xl p-6 bg-white text-center"
+          >
+            <div
+              class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center mx-auto mb-4"
+            >
+              <i data-lucide="zap" class="h-6 w-6 text-indigo-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Features</h3>
+            <p class="text-sm text-gray-500">
+              Powerful tools built for modern creators
+            </p>
+          </div>
+          <div
+            onclick="showPage('pricing')"
+            class="feature-card cursor-pointer border border-gray-100 rounded-2xl p-6 bg-white text-center"
+          >
+            <div
+              class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4"
+            >
+              <i data-lucide="tag" class="h-6 w-6 text-blue-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Pricing</h3>
+            <p class="text-sm text-gray-500">
+              Transparent plans for every creator
+            </p>
+          </div>
+          <div
+            onclick="showPage('resources')"
+            class="feature-card cursor-pointer border border-gray-100 rounded-2xl p-6 bg-white text-center"
+          >
+            <div
+              class="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center mx-auto mb-4"
+            >
+              <i data-lucide="book-open" class="h-6 w-6 text-violet-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Resources</h3>
+            <p class="text-sm text-gray-500">
+              Guides, tutorials, and success stories
+            </p>
+          </div>
+          <div
+            onclick="showPage('contact')"
+            class="feature-card cursor-pointer border border-gray-100 rounded-2xl p-6 bg-white text-center"
+          >
+            <div
+              class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mx-auto mb-4"
+            >
+              <i data-lucide="mail" class="h-6 w-6 text-emerald-600"></i>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Contact</h3>
+            <p class="text-sm text-gray-500">We're here to help you grow</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== FEATURES PAGE ========== -->
+    <div id="page-features" class="page">
+      <!-- Hero -->
+      <section
+        class="hero-bg py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
+      >
+        <div class="absolute inset-0 dot-bg opacity-40"></div>
+        <div class="max-w-4xl mx-auto text-center relative">
+          <div
+            class="inline-flex items-center gap-2 bg-white border border-indigo-100 rounded-full px-4 py-1.5 text-sm text-indigo-600 font-medium mb-6 fade-up shadow-sm"
+          >
+            <i data-lucide="sparkles" class="h-4 w-4"></i> Built for ambitious
+            creators
+          </div>
+          <h1
+            class="font-display text-5xl sm:text-6xl font-bold text-gray-900 mb-6 fade-up-d1"
+          >
+            Every tool you need,<br /><em class="text-indigo-600"
+              >nothing you don't</em
+            >
+          </h1>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto fade-up-d2">
+            FundFlow gives creators a complete fundraising stack — from campaign
+            launch to backer management and analytics — in one seamless
+            platform.
+          </p>
+        </div>
+      </section>
+
+      <!-- Core Features Grid -->
+      <section class="py-20 px-4 max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Card 1 -->
+          <div
+            class="feature-card border border-gray-100 rounded-2xl p-8 bg-white"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center mb-6 shadow-lg shadow-indigo-200 float-anim"
+            >
+              <i data-lucide="rocket" class="h-7 w-7 text-white"></i>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
+              Campaign Builder
+            </h3>
+            <p class="text-gray-500 leading-relaxed mb-4">
+              Launch in minutes with our drag-and-drop editor. Add videos,
+              reward tiers, FAQs, and milestones without writing a single line
+              of code.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-indigo-500"></i
+                >Customizable templates
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-indigo-500"></i>Video
+                & image galleries
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-indigo-500"></i
+                >Reward tier management
+              </li>
+            </ul>
+          </div>
+          <!-- Card 2 -->
+          <div
+            class="feature-card border border-gray-100 rounded-2xl p-8 bg-white"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-violet-200 float-anim"
+              style="animation-delay: 0.5s"
+            >
+              <i data-lucide="bar-chart-2" class="h-7 w-7 text-white"></i>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
+              Real-Time Analytics
+            </h3>
+            <p class="text-gray-500 leading-relaxed mb-4">
+              Track pledge velocity, backer demographics, traffic sources, and
+              conversion rates with live dashboards that actually make sense.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-violet-500"></i>Live
+                pledge tracking
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-violet-500"></i
+                >Traffic source breakdown
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-violet-500"></i
+                >Exportable reports
+              </li>
+            </ul>
+          </div>
+          <!-- Card 3 -->
+          <div
+            class="feature-card border border-gray-100 rounded-2xl p-8 bg-white"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mb-6 shadow-lg shadow-emerald-200 float-anim"
+              style="animation-delay: 1s"
+            >
+              <i data-lucide="users" class="h-7 w-7 text-white"></i>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
+              Backer Community
+            </h3>
+            <p class="text-gray-500 leading-relaxed mb-4">
+              Build a loyal audience around your project. Send updates, host
+              polls, and create a private community space for your most
+              dedicated supporters.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-emerald-500"></i
+                >Backer-only updates
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-emerald-500"></i
+                >Community forum
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-emerald-500"></i
+                >Polls & surveys
+              </li>
+            </ul>
+          </div>
+          <!-- Card 4 -->
+          <div
+            class="feature-card border border-gray-100 rounded-2xl p-8 bg-white"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-400 to-rose-500 flex items-center justify-center mb-6 shadow-lg shadow-orange-200 float-anim"
+              style="animation-delay: 0.3s"
+            >
+              <i data-lucide="credit-card" class="h-7 w-7 text-white"></i>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
+              Flexible Payments
+            </h3>
+            <p class="text-gray-500 leading-relaxed mb-4">
+              Accept payments from 180+ countries via cards, PayPal, Apple Pay,
+              and Google Pay. Choose fixed or flexible funding models.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-orange-500"></i>Fixed
+                & flexible funding
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-orange-500"></i
+                >Multi-currency support
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-orange-500"></i
+                >Instant payouts available
+              </li>
+            </ul>
+          </div>
+          <!-- Card 5 -->
+          <div
+            class="feature-card border border-gray-100 rounded-2xl p-8 bg-white"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center mb-6 shadow-lg shadow-sky-200 float-anim"
+              style="animation-delay: 0.8s"
+            >
+              <i data-lucide="megaphone" class="h-7 w-7 text-white"></i>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
+              Marketing Toolkit
+            </h3>
+            <p class="text-gray-500 leading-relaxed mb-4">
+              Drive traffic with built-in email sequences, referral programs,
+              social sharing cards, and one-click integrations with major
+              marketing tools.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-sky-500"></i>Email
+                automation
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-sky-500"></i>Referral
+                programs
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-sky-500"></i>Social
+                share cards
+              </li>
+            </ul>
+          </div>
+          <!-- Card 6 -->
+          <div
+            class="feature-card border border-gray-100 rounded-2xl p-8 bg-white"
+          >
+            <div
+              class="w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-500 to-fuchsia-600 flex items-center justify-center mb-6 shadow-lg shadow-pink-200 float-anim"
+              style="animation-delay: 1.3s"
+            >
+              <i data-lucide="shield-check" class="h-7 w-7 text-white"></i>
+            </div>
+            <h3 class="font-display text-xl font-semibold text-gray-900 mb-3">
+              Trust & Safety
+            </h3>
+            <p class="text-gray-500 leading-relaxed mb-4">
+              Verified creator badges, fraud detection, and backer protection
+              guarantees. Your community's trust is our top priority.
+            </p>
+            <ul class="space-y-2 text-sm text-gray-600">
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-pink-500"></i>Creator
+                verification
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-pink-500"></i>Fraud
+                detection AI
+              </li>
+              <li class="flex items-center gap-2">
+                <i data-lucide="check" class="h-4 w-4 text-pink-500"></i>Backer
+                guarantees
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Banner -->
+      <section class="mx-4 sm:mx-8 lg:mx-auto max-w-7xl mb-20">
+        <div
+          class="hero-bg-dark rounded-3xl px-8 py-16 text-center relative overflow-hidden"
+        >
+          <div class="absolute inset-0 dot-bg opacity-10"></div>
+          <h2 class="font-display text-4xl font-bold text-white mb-4 relative">
+            Ready to launch your campaign?
+          </h2>
+          <p class="text-indigo-200 text-lg mb-8 relative">
+            Join 50,000+ creators who chose FundFlow.
+          </p>
+          <button
+            onclick="showPage('pricing')"
+            class="bg-white text-indigo-700 font-semibold px-8 py-4 rounded-xl hover:bg-indigo-50 transition-colors relative"
+          >
+            View Pricing Plans →
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== PRICING PAGE ========== -->
+    <div id="page-pricing" class="page">
+      <!-- Hero -->
+      <section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+          <h1
+            class="font-display text-5xl sm:text-6xl font-bold text-gray-900 mb-6 fade-up"
+          >
+            Simple, transparent<br /><em class="text-indigo-600">pricing</em>
+          </h1>
+          <p class="text-xl text-gray-600 mb-10 fade-up-d1">
+            No hidden fees. No surprises. Pay only for what you use — or upgrade
+            to unlock more power.
+          </p>
+          <!-- Toggle -->
+          <div class="flex items-center justify-center gap-4 fade-up-d2">
+            <span class="text-sm font-medium text-gray-700" id="label-monthly"
+              >Monthly</span
+            >
+            <button
+              onclick="toggleBilling()"
+              class="toggle-pill relative w-14 h-7 bg-indigo-600 rounded-full flex items-center"
+              id="billing-toggle"
+            >
+              <span
+                class="toggle-knob absolute w-5 h-5 bg-white rounded-full left-1"
+                id="billing-knob"
+              ></span>
+            </button>
+            <span class="text-sm font-medium text-gray-400" id="label-annual"
+              >Annual
+              <span class="text-emerald-600 font-semibold">Save 20%</span></span
+            >
+          </div>
+        </div>
+      </section>
+
+      <!-- Plans -->
+      <section class="py-16 px-4 max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-3 gap-8 items-start">
+          <!-- Starter -->
+          <div
+            class="border border-gray-200 rounded-2xl p-8 bg-white feature-card"
+          >
+            <div class="mb-6">
+              <div
+                class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2"
+              >
+                Starter
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span
+                  class="font-display text-5xl font-bold text-gray-900"
+                  id="price-starter"
+                  >$0</span
+                >
+                <span class="text-gray-500 text-sm">/mo</span>
+              </div>
+              <p class="text-gray-500 text-sm mt-2">
+                Perfect for first-time creators exploring crowdfunding.
+              </p>
+            </div>
+            <button
+              class="w-full border border-indigo-200 text-indigo-600 font-semibold py-3 rounded-xl hover:bg-indigo-50 transition-colors mb-8"
+            >
+              Get Started Free
+            </button>
+            <ul class="space-y-3 text-sm text-gray-600">
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >1 active campaign
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >5% platform fee
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Basic analytics
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Email support
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="x-circle"
+                  class="h-4 w-4 text-gray-300 mt-0.5 flex-shrink-0"
+                ></i
+                ><span class="text-gray-400">Custom domain</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="x-circle"
+                  class="h-4 w-4 text-gray-300 mt-0.5 flex-shrink-0"
+                ></i
+                ><span class="text-gray-400">Team access</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Pro (Popular) -->
+          <div
+            class="border-2 border-indigo-500 rounded-2xl p-8 bg-white feature-card relative shadow-xl shadow-indigo-100"
+          >
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span
+                class="shimmer-badge text-white text-xs font-bold px-4 py-1.5 rounded-full"
+                >MOST POPULAR</span
+              >
+            </div>
+            <div class="mb-6">
+              <div
+                class="text-sm font-semibold text-indigo-600 uppercase tracking-wider mb-2"
+              >
+                Pro
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span
+                  class="font-display text-5xl font-bold text-gray-900"
+                  id="price-pro"
+                  >$29</span
+                >
+                <span class="text-gray-500 text-sm">/mo</span>
+              </div>
+              <p class="text-gray-500 text-sm mt-2">
+                For serious creators ready to scale their campaigns.
+              </p>
+            </div>
+            <button
+              class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl transition-colors mb-8 shadow-lg shadow-indigo-200"
+            >
+              Start Pro Trial
+            </button>
+            <ul class="space-y-3 text-sm text-gray-600">
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Unlimited campaigns
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >2% platform fee
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Advanced analytics & reports
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Priority support
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Custom domain
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Up to 3 team members
+              </li>
+            </ul>
+          </div>
+
+          <!-- Enterprise -->
+          <div
+            class="border border-gray-200 rounded-2xl p-8 bg-white feature-card"
+          >
+            <div class="mb-6">
+              <div
+                class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2"
+              >
+                Enterprise
+              </div>
+              <div class="flex items-baseline gap-1">
+                <span class="font-display text-5xl font-bold text-gray-900"
+                  >Custom</span
+                >
+              </div>
+              <p class="text-gray-500 text-sm mt-2">
+                For agencies, nonprofits, and high-volume fundraisers.
+              </p>
+            </div>
+            <button
+              onclick="showPage('contact')"
+              class="w-full border border-gray-300 text-gray-700 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-colors mb-8"
+            >
+              Talk to Sales
+            </button>
+            <ul class="space-y-3 text-sm text-gray-600">
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Everything in Pro
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >0% platform fee
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Dedicated account manager
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >SLA & uptime guarantees
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Custom integrations
+              </li>
+              <li class="flex items-start gap-3">
+                <i
+                  data-lucide="check-circle"
+                  class="h-4 w-4 text-indigo-500 mt-0.5 flex-shrink-0"
+                ></i
+                >Unlimited team members
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="py-12 px-4 max-w-3xl mx-auto">
+        <h2
+          class="font-display text-3xl font-bold text-gray-900 text-center mb-10"
+        >
+          Frequently asked questions
+        </h2>
+        <div class="space-y-3" id="faq-list">
+          <!-- FAQs injected by JS -->
+        </div>
+      </section>
+
+      <!-- Compare features table -->
+      <section class="py-12 px-4 max-w-5xl mx-auto mb-16">
+        <h2
+          class="font-display text-3xl font-bold text-gray-900 text-center mb-10"
+        >
+          Compare plans
+        </h2>
+        <div class="overflow-x-auto rounded-2xl border border-gray-200">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="border-b border-gray-200 bg-gray-50">
+                <th class="text-left py-4 px-6 font-semibold text-gray-700">
+                  Feature
+                </th>
+                <th class="text-center py-4 px-6 font-semibold text-gray-700">
+                  Starter
+                </th>
+                <th
+                  class="text-center py-4 px-6 font-semibold text-indigo-700 bg-indigo-50"
+                >
+                  Pro
+                </th>
+                <th class="text-center py-4 px-6 font-semibold text-gray-700">
+                  Enterprise
+                </th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr>
+                <td class="py-4 px-6 text-gray-600">Active campaigns</td>
+                <td class="text-center py-4 px-6">1</td>
+                <td class="text-center py-4 px-6 bg-indigo-50/50">Unlimited</td>
+                <td class="text-center py-4 px-6">Unlimited</td>
+              </tr>
+              <tr>
+                <td class="py-4 px-6 text-gray-600">Platform fee</td>
+                <td class="text-center py-4 px-6">5%</td>
+                <td class="text-center py-4 px-6 bg-indigo-50/50">2%</td>
+                <td class="text-center py-4 px-6">0%</td>
+              </tr>
+              <tr>
+                <td class="py-4 px-6 text-gray-600">Team members</td>
+                <td class="text-center py-4 px-6">—</td>
+                <td class="text-center py-4 px-6 bg-indigo-50/50">3</td>
+                <td class="text-center py-4 px-6">Unlimited</td>
+              </tr>
+              <tr>
+                <td class="py-4 px-6 text-gray-600">Custom domain</td>
+                <td class="text-center py-4 px-6">
+                  <i data-lucide="x" class="h-4 w-4 text-gray-300 mx-auto"></i>
+                </td>
+                <td class="text-center py-4 px-6 bg-indigo-50/50">
+                  <i
+                    data-lucide="check"
+                    class="h-4 w-4 text-indigo-500 mx-auto"
+                  ></i>
+                </td>
+                <td class="text-center py-4 px-6">
+                  <i
+                    data-lucide="check"
+                    class="h-4 w-4 text-indigo-500 mx-auto"
+                  ></i>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 px-6 text-gray-600">Priority support</td>
+                <td class="text-center py-4 px-6">
+                  <i data-lucide="x" class="h-4 w-4 text-gray-300 mx-auto"></i>
+                </td>
+                <td class="text-center py-4 px-6 bg-indigo-50/50">
+                  <i
+                    data-lucide="check"
+                    class="h-4 w-4 text-indigo-500 mx-auto"
+                  ></i>
+                </td>
+                <td class="text-center py-4 px-6">
+                  <i
+                    data-lucide="check"
+                    class="h-4 w-4 text-indigo-500 mx-auto"
+                  ></i>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 px-6 text-gray-600">
+                  Dedicated account manager
+                </td>
+                <td class="text-center py-4 px-6">
+                  <i data-lucide="x" class="h-4 w-4 text-gray-300 mx-auto"></i>
+                </td>
+                <td class="text-center py-4 px-6 bg-indigo-50/50">
+                  <i data-lucide="x" class="h-4 w-4 text-gray-300 mx-auto"></i>
+                </td>
+                <td class="text-center py-4 px-6">
+                  <i
+                    data-lucide="check"
+                    class="h-4 w-4 text-indigo-500 mx-auto"
+                  ></i>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== RESOURCES PAGE ========== -->
+    <div id="page-resources" class="page">
+      <!-- Hero -->
+      <section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+          <h1
+            class="font-display text-5xl sm:text-6xl font-bold text-gray-900 mb-6 fade-up"
+          >
+            Your fundraising<br /><em class="text-indigo-600">knowledge hub</em>
+          </h1>
+          <p class="text-xl text-gray-600 mb-10 fade-up-d1">
+            Guides, templates, case studies, and expert advice to help you run
+            your best campaign yet.
+          </p>
+          <!-- Search bar -->
+          <div class="relative max-w-xl mx-auto fade-up-d2">
+            <i
+              data-lucide="search"
+              class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+            ></i>
+            <input
+              type="text"
+              placeholder="Search guides, tutorials, tips..."
+              class="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 shadow-sm text-gray-700 contact-input bg-white focus:outline-none"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Category tabs -->
+      <section class="py-12 px-4 max-w-7xl mx-auto">
+        <div
+          class="flex gap-3 flex-wrap justify-center mb-10"
+          id="resource-tabs"
+        >
+          <button
+            onclick="filterResources('all')"
+            class="res-tab active-tab px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-indigo-600 text-white"
+          >
+            All Resources
+          </button>
+          <button
+            onclick="filterResources('guide')"
+            class="res-tab px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+          >
+            Guides
+          </button>
+          <button
+            onclick="filterResources('tutorial')"
+            class="res-tab px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+          >
+            Tutorials
+          </button>
+          <button
+            onclick="filterResources('case-study')"
+            class="res-tab px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+          >
+            Case Studies
+          </button>
+          <button
+            onclick="filterResources('template')"
+            class="res-tab px-5 py-2.5 rounded-full text-sm font-medium transition-all bg-white border border-gray-200 text-gray-600 hover:border-indigo-300"
+          >
+            Templates
+          </button>
+        </div>
+
+        <!-- Resource cards grid -->
+        <div
+          class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          id="resource-grid"
+        >
+          <!-- Cards injected by JS -->
+        </div>
+      </section>
+
+      <!-- Newsletter signup -->
+      <section class="py-16 px-4 max-w-7xl mx-auto mb-8">
+        <div
+          class="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-3xl p-12 text-center text-white relative overflow-hidden"
+        >
+          <div class="absolute inset-0 dot-bg opacity-10"></div>
+          <div class="relative">
+            <i
+              data-lucide="mail"
+              class="h-10 w-10 mx-auto mb-4 text-indigo-200"
+            ></i>
+            <h2 class="font-display text-3xl font-bold mb-3">
+              Weekly creator insights
+            </h2>
+            <p class="text-indigo-200 mb-8 max-w-xl mx-auto">
+              Get the latest fundraising tactics, platform updates, and success
+              stories delivered to your inbox every Tuesday.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <input
+                type="email"
+                placeholder="your@email.com"
+                class="flex-1 px-5 py-3 rounded-xl text-gray-800 text-sm contact-input bg-white border border-transparent"
+              />
+              <button
+                class="bg-white text-indigo-700 font-semibold px-6 py-3 rounded-xl hover:bg-indigo-50 transition-colors whitespace-nowrap"
+              >
+                Subscribe Free
+              </button>
+            </div>
+            <p class="text-indigo-300 text-xs mt-3">
+              Join 12,000+ creators. Unsubscribe anytime.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== CONTACT PAGE ========== -->
+    <div id="page-contact" class="page">
+      <!-- Hero -->
+      <section class="hero-bg py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center">
+          <h1
+            class="font-display text-5xl sm:text-6xl font-bold text-gray-900 mb-6 fade-up"
+          >
+            Let's talk about<br /><em class="text-indigo-600">your campaign</em>
+          </h1>
+          <p class="text-xl text-gray-600 fade-up-d1">
+            Our team is here to help you succeed. Whether you have a question,
+            need a demo, or want a custom plan — we're just a message away.
+          </p>
+        </div>
+      </section>
+
+      <section class="py-16 px-4 max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-3 gap-12">
+          <!-- Contact info sidebar -->
+          <div class="space-y-8">
+            <div>
+              <h3 class="font-display text-xl font-semibold text-gray-900 mb-6">
+                Get in touch
+              </h3>
+              <div class="space-y-5">
+                <div class="flex items-start gap-4">
+                  <div
+                    class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                  >
+                    <i data-lucide="mail" class="h-5 w-5 text-indigo-600"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-semibold text-gray-700 mb-0.5">
+                      Email us
+                    </div>
+                    <a
+                      href="mailto:hello@fundflow.com"
+                      class="text-indigo-600 hover:underline text-sm"
+                      >hello@fundflow.com</a
+                    >
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div
+                    class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                  >
+                    <i
+                      data-lucide="message-circle"
+                      class="h-5 w-5 text-indigo-600"
+                    ></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-semibold text-gray-700 mb-0.5">
+                      Live chat
+                    </div>
+                    <span class="text-gray-500 text-sm"
+                      >Mon–Fri, 9am–6pm EST</span
+                    >
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div
+                    class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                  >
+                    <i data-lucide="phone" class="h-5 w-5 text-indigo-600"></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-semibold text-gray-700 mb-0.5">
+                      Phone
+                    </div>
+                    <a
+                      href="tel:+18005551234"
+                      class="text-indigo-600 hover:underline text-sm"
+                      >+1 (800) 555-1234</a
+                    >
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div
+                    class="w-10 h-10 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0"
+                  >
+                    <i
+                      data-lucide="map-pin"
+                      class="h-5 w-5 text-indigo-600"
+                    ></i>
+                  </div>
+                  <div>
+                    <div class="text-sm font-semibold text-gray-700 mb-0.5">
+                      Office
+                    </div>
+                    <span class="text-gray-500 text-sm"
+                      >340 Pine St, San Francisco, CA 94104</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Response time badges -->
+            <div
+              class="bg-emerald-50 border border-emerald-100 rounded-2xl p-5"
+            >
+              <div class="flex items-center gap-2 mb-2">
+                <span
+                  class="w-2 h-2 rounded-full bg-emerald-500 inline-block"
+                ></span>
+                <span class="text-sm font-semibold text-emerald-800"
+                  >We're online</span
+                >
+              </div>
+              <p class="text-emerald-700 text-sm">
+                Average response time: <strong>under 2 hours</strong>
+              </p>
+            </div>
+
+            <!-- Social links -->
+            <div>
+              <h4 class="text-sm font-semibold text-gray-700 mb-4">
+                Follow us
+              </h4>
+              <div class="flex gap-3">
+                <a
+                  href="#"
+                  class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors"
+                  ><i data-lucide="twitter" class="h-4 w-4"></i
+                ></a>
+                <a
+                  href="#"
+                  class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors"
+                  ><i data-lucide="linkedin" class="h-4 w-4"></i
+                ></a>
+                <a
+                  href="#"
+                  class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors"
+                  ><i data-lucide="instagram" class="h-4 w-4"></i
+                ></a>
+                <a
+                  href="#"
+                  class="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-200 transition-colors"
+                  ><i data-lucide="youtube" class="h-4 w-4"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact form -->
+          <div class="lg:col-span-2">
+            <div
+              class="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm"
+              id="contact-form-wrap"
+            >
+              <h3 class="font-display text-2xl font-bold text-gray-900 mb-2">
+                Send us a message
+              </h3>
+              <p class="text-gray-500 text-sm mb-8">
+                Tell us about your project and how we can help.
+              </p>
+
+              <!-- Reason tabs -->
+              <div class="flex gap-2 flex-wrap mb-8">
+                <button
+                  onclick="setReason(this)"
+                  class="reason-btn active-reason px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white transition-all"
+                >
+                  General question
+                </button>
+                <button
+                  onclick="setReason(this)"
+                  class="reason-btn px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 text-gray-600 hover:border-indigo-300 transition-all"
+                >
+                  Sales & pricing
+                </button>
+                <button
+                  onclick="setReason(this)"
+                  class="reason-btn px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 text-gray-600 hover:border-indigo-300 transition-all"
+                >
+                  Technical support
+                </button>
+                <button
+                  onclick="setReason(this)"
+                  class="reason-btn px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 text-gray-600 hover:border-indigo-300 transition-all"
+                >
+                  Partnership
+                </button>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                    >First name</label
+                  >
+                  <input
+                    type="text"
+                    placeholder="Alex"
+                    class="contact-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 bg-white transition-all"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                    >Last name</label
+                  >
+                  <input
+                    type="text"
+                    placeholder="Rivera"
+                    class="contact-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 bg-white transition-all"
+                  />
+                </div>
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  >Email address</label
+                >
+                <input
+                  type="email"
+                  placeholder="alex@example.com"
+                  class="contact-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 bg-white transition-all"
+                />
+              </div>
+              <div class="mb-5">
+                <label class="block text-sm font-medium text-gray-700 mb-1.5"
+                  >Tell us more</label
+                >
+                <textarea
+                  rows="5"
+                  placeholder="Describe your project, campaign idea, or question..."
+                  class="contact-input w-full border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 bg-white resize-none transition-all"
+                ></textarea>
+              </div>
+              <div class="flex items-center gap-3 mb-6">
+                <input
+                  type="checkbox"
+                  id="consent"
+                  class="w-4 h-4 rounded accent-indigo-600"
+                />
+                <label for="consent" class="text-xs text-gray-500"
+                  >I agree to FundFlow's
+                  <a href="#" class="text-indigo-600 hover:underline"
+                    >privacy policy</a
+                  >
+                  and consent to being contacted by the team.</label
+                >
+              </div>
+              <button
+                onclick="submitContact()"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-4 rounded-xl transition-colors flex items-center justify-center gap-2"
+              >
+                <i data-lucide="send" class="h-4 w-4"></i> Send Message
+              </button>
+            </div>
+
+            <!-- Success state (hidden) -->
+            <div
+              id="contact-success"
+              class="hidden bg-white border border-emerald-100 rounded-2xl p-12 text-center shadow-sm"
+            >
+              <div
+                class="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6"
+              >
+                <i data-lucide="check" class="h-8 w-8 text-emerald-600"></i>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-gray-900 mb-2">
+                Message sent!
+              </h3>
+              <p class="text-gray-500">
+                Thanks for reaching out. Our team will reply within 2 hours on
+                business days.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="col-span-1">
+            <span class="text-2xl font-bold text-white font-display"
+              >FundFlow</span
+            >
+            <p class="text-gray-400 text-sm mb-4 mt-2">
+              Empowering creators and innovators to bring their ideas to life
+              through community-driven funding.
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i data-lucide="twitter" class="h-5 w-5"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i data-lucide="facebook" class="h-5 w-5"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i data-lucide="instagram" class="h-5 w-5"></i
+              ></a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-white transition-colors"
+                ><i data-lucide="linkedin" class="h-5 w-5"></i
+              ></a>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-white font-semibold mb-4">Platform</h3>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <button
+                  onclick="showPage('features')"
+                  class="text-gray-400 hover:text-white transition-colors"
+                >
+                  Features
+                </button>
+              </li>
+              <li>
+                <button
+                  onclick="showPage('pricing')"
+                  class="text-gray-400 hover:text-white transition-colors"
+                >
+                  Pricing
+                </button>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Creator Tools</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Success Stories</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-white font-semibold mb-4">Company</h3>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Careers</a
+                >
+              </li>
+              <li>
+                <button
+                  onclick="showPage('resources')"
+                  class="text-gray-400 hover:text-white transition-colors"
+                >
+                  Blog
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-white font-semibold mb-4">Support</h3>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <button
+                  onclick="showPage('resources')"
+                  class="text-gray-400 hover:text-white transition-colors"
+                >
+                  Help Center
+                </button>
+              </li>
+              <li>
+                <button
+                  onclick="showPage('contact')"
+                  class="text-gray-400 hover:text-white transition-colors"
+                >
+                  Contact Us
+                </button>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Privacy Policy</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >Terms of Service</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+          <p class="text-gray-400 text-sm">
+            © 2026 FundFlow. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // ---- Page routing ----
+      const pages = ["home", "features", "pricing", "resources", "contact"];
+      function showPage(name) {
+        pages.forEach((p) => {
+          document.getElementById("page-" + p).classList.remove("active");
+          const nav = document.getElementById("nav-" + p);
+          if (nav) nav.classList.remove("active");
+        });
+        document.getElementById("page-" + name).classList.add("active");
+        const nav = document.getElementById("nav-" + name);
+        if (nav) nav.classList.add("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        // Close mobile menu
+        document.getElementById("mobile-menu").classList.add("hidden");
+        lucide.createIcons();
+      }
+
+      function toggleMobileMenu() {
+        document.getElementById("mobile-menu").classList.toggle("hidden");
+      }
+
+      // ---- Billing toggle ----
+      let isAnnual = false;
+      const prices = {
+        starter: [0, 0],
+        pro: [29, 23],
+        enterprise: ["Custom", "Custom"],
+      };
+      function toggleBilling() {
+        isAnnual = !isAnnual;
+        const knob = document.getElementById("billing-knob");
+        knob.style.transform = isAnnual ? "translateX(28px)" : "";
+        document.getElementById("label-monthly").className = isAnnual
+          ? "text-sm font-medium text-gray-400"
+          : "text-sm font-medium text-gray-700";
+        document.getElementById("label-annual").className = isAnnual
+          ? "text-sm font-medium text-gray-700"
+          : "text-sm font-medium text-gray-400";
+        document.getElementById("price-starter").textContent =
+          "$" + prices.starter[isAnnual ? 1 : 0];
+        document.getElementById("price-pro").textContent =
+          "$" + prices.pro[isAnnual ? 1 : 0];
+      }
+
+      // ---- FAQ Accordion ----
+      const faqs = [
+        {
+          q: "What fees does FundFlow charge?",
+          a: "Starter plans have a 5% platform fee. Pro plans reduce this to 2%, and Enterprise plans have 0% platform fees. Standard payment processing fees (Stripe/PayPal) apply to all plans.",
+        },
+        {
+          q: "Can I switch plans anytime?",
+          a: "Yes! You can upgrade or downgrade your plan at any time. Upgrades take effect immediately, and downgrades apply at the end of your billing cycle.",
+        },
+        {
+          q: "What's the difference between fixed and flexible funding?",
+          a: "Fixed funding means you only receive funds if you hit your goal. Flexible funding lets you keep all contributions regardless of whether you reach your target — great for ongoing projects.",
+        },
+        {
+          q: "Do I own my backer data?",
+          a: "Absolutely. Your campaign data and backer information belong to you. FundFlow never shares or sells your data to third parties.",
+        },
+        {
+          q: "How quickly do I receive my funds?",
+          a: "Standard payouts are processed within 7 business days after your campaign ends. Pro and Enterprise customers can access expedited payouts within 1–2 business days.",
+        },
+      ];
+
+      function buildFAQ() {
+        const container = document.getElementById("faq-list");
+        if (!container) return;
+        container.innerHTML = faqs
+          .map(
+            (f, i) => `
+        <div class="border border-gray-200 rounded-xl overflow-hidden">
+          <button onclick="toggleFAQ(${i})" class="w-full flex items-center justify-between px-6 py-4 text-left bg-white hover:bg-gray-50 transition-colors">
+            <span class="font-medium text-gray-800 text-sm">${f.q}</span>
+            <i data-lucide="chevron-down" class="h-4 w-4 text-gray-400 flex-shrink-0 transition-transform" id="faq-icon-${i}"></i>
+          </button>
+          <div class="accordion-content" id="faq-content-${i}">
+            <p class="px-6 pb-4 pt-1 text-gray-500 text-sm leading-relaxed">${f.a}</p>
+          </div>
+        </div>
+      `,
+          )
+          .join("");
+        lucide.createIcons();
+      }
+
+      function toggleFAQ(i) {
+        const content = document.getElementById("faq-content-" + i);
+        const icon = document.getElementById("faq-icon-" + i);
+        content.classList.toggle("open");
+        icon.style.transform = content.classList.contains("open")
+          ? "rotate(180deg)"
+          : "";
+      }
+
+      // ---- Resources ----
+      const resources = [
+        {
+          type: "guide",
+          tag: "Guide",
+          color: "indigo",
+          icon: "book-open",
+          title: "The Complete Campaign Launch Checklist",
+          desc: "Everything you need to prepare, launch, and promote a campaign that converts.",
+          time: "8 min read",
+        },
+        {
+          type: "tutorial",
+          tag: "Tutorial",
+          color: "blue",
+          icon: "play-circle",
+          title: "Setting Up Your Reward Tiers for Maximum Backing",
+          desc: "Learn how to structure rewards that attract backers at every price point.",
+          time: "12 min read",
+        },
+        {
+          type: "case-study",
+          tag: "Case Study",
+          color: "violet",
+          icon: "star",
+          title: "How Luminary Raised $400K in 30 Days",
+          desc: "A deep-dive into the strategy, marketing, and storytelling behind one of FundFlow's biggest campaigns.",
+          time: "6 min read",
+        },
+        {
+          type: "template",
+          tag: "Template",
+          color: "emerald",
+          icon: "file-text",
+          title: "Campaign Description Template Pack",
+          desc: "Proven copy frameworks for your campaign page — just fill in the blanks.",
+          time: "Free download",
+        },
+        {
+          type: "guide",
+          tag: "Guide",
+          color: "indigo",
+          icon: "trending-up",
+          title: "Growing Your Audience Before Launch Day",
+          desc: "Build a pre-launch waitlist and hit the ground running from day one.",
+          time: "10 min read",
+        },
+        {
+          type: "tutorial",
+          tag: "Tutorial",
+          color: "blue",
+          icon: "mail",
+          title: "Email Sequences That Convert Visitors to Backers",
+          desc: "The exact email flows used by top creators to drive pledges on autopilot.",
+          time: "9 min read",
+        },
+        {
+          type: "case-study",
+          tag: "Case Study",
+          color: "violet",
+          icon: "award",
+          title: "From Idea to $1M: A First-Time Creator's Story",
+          desc: "No audience, no budget — just a great product and the right platform.",
+          time: "7 min read",
+        },
+        {
+          type: "template",
+          tag: "Template",
+          color: "emerald",
+          icon: "layout",
+          title: "Campaign Video Script Template",
+          desc: "A battle-tested script structure that keeps viewers watching and clicking.",
+          time: "Free download",
+        },
+        {
+          type: "guide",
+          tag: "Guide",
+          color: "indigo",
+          icon: "shield",
+          title: "Managing Your Campaign After the Goal Is Met",
+          desc: "Fulfillment, communication, and keeping your backers happy post-campaign.",
+          time: "11 min read",
+        },
+      ];
+
+      const colorMap = {
+        indigo: {
+          bg: "bg-indigo-100",
+          text: "text-indigo-600",
+          badge: "bg-indigo-100 text-indigo-700",
+        },
+        blue: {
+          bg: "bg-blue-100",
+          text: "text-blue-600",
+          badge: "bg-blue-100 text-blue-700",
+        },
+        violet: {
+          bg: "bg-violet-100",
+          text: "text-violet-600",
+          badge: "bg-violet-100 text-violet-700",
+        },
+        emerald: {
+          bg: "bg-emerald-100",
+          text: "text-emerald-600",
+          badge: "bg-emerald-100 text-emerald-700",
+        },
+      };
+
+      function buildResources(filter = "all") {
+        const grid = document.getElementById("resource-grid");
+        if (!grid) return;
+        const filtered =
+          filter === "all"
+            ? resources
+            : resources.filter((r) => r.type === filter);
+        grid.innerHTML = filtered
+          .map((r) => {
+            const c = colorMap[r.color];
+            return `
+          <div class="resource-card bg-white border border-gray-100 rounded-2xl overflow-hidden cursor-pointer">
+            <div class="${c.bg} h-36 flex items-center justify-center">
+              <i data-lucide="${r.icon}" class="h-10 w-10 ${c.text}"></i>
+            </div>
+            <div class="p-6">
+              <span class="inline-block text-xs font-semibold px-2.5 py-1 rounded-full ${c.badge} mb-3">${r.tag}</span>
+              <h3 class="font-display font-semibold text-gray-900 mb-2 leading-snug">${r.title}</h3>
+              <p class="text-gray-500 text-sm leading-relaxed mb-4">${r.desc}</p>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-gray-400">${r.time}</span>
+                <span class="${c.text} text-sm font-medium hover:underline">Read →</span>
+              </div>
+            </div>
+          </div>
+        `;
+          })
+          .join("");
+        lucide.createIcons();
+      }
+
+      function filterResources(type) {
+        document.querySelectorAll(".res-tab").forEach((btn) => {
+          btn.classList.remove("active-tab", "bg-indigo-600", "text-white");
+          btn.classList.add(
+            "bg-white",
+            "border",
+            "border-gray-200",
+            "text-gray-600",
+          );
+        });
+        event.target.classList.add("active-tab", "bg-indigo-600", "text-white");
+        event.target.classList.remove(
+          "bg-white",
+          "border",
+          "border-gray-200",
+          "text-gray-600",
+        );
+        buildResources(type);
+      }
+
+      // ---- Contact reason tabs ----
+      function setReason(btn) {
+        document.querySelectorAll(".reason-btn").forEach((b) => {
+          b.classList.remove("active-reason", "bg-indigo-600", "text-white");
+          b.classList.add("border", "border-gray-200", "text-gray-600");
+        });
+        btn.classList.add("active-reason", "bg-indigo-600", "text-white");
+        btn.classList.remove("border", "border-gray-200", "text-gray-600");
+      }
+
+      // ---- Contact submit ----
+      function submitContact() {
+        document.getElementById("contact-form-wrap").classList.add("hidden");
+        document.getElementById("contact-success").classList.remove("hidden");
+        lucide.createIcons();
+      }
+
+      // ---- Init ----
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+        buildFAQ();
+        buildResources();
+      });
+    </script>
+  </body>
+</html>
