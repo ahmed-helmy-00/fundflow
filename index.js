@@ -127,25 +127,88 @@ const server = http.createServer(async (req, res) => {
   else if (method === "POST" && path === "/register") {
     collectBody((data) => {
       console.log("User Registration Data:", data);
-      bcrypt.hash(data.password, saltRounds, (err, hash) => {
-        if (err) {
-          return sendResponse(500, { error: "Error hashing password" });
-        }
-        // Continue with user creation logic
-        console.log("Hashed Password:", hash);
-        // Here you would typically save the user to the database
+      try {
         connection.query(
-          "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)",
-          [data.name, data.email, hash, data.role],
+          "SELECT * FROM users WHERE email = ?",
+          [data.email],
           (error, results) => {
             if (error) {
-              return sendResponse(500, { error: "Error creating user" });
+              return sendResponse(500, {
+                error: "Error checking existing user",
+              });
             }
-            // For demonstration, we'll just return a success message
-            sendResponse(201, { message: "User registered successfully" });
+            if (results.length > 0) {
+              return sendResponse(400, { error: "Email already registered" });
+            }
           },
         );
-      });
+        try {
+          bcrypt.hash(data.password, saltRounds, (err, hash) => {
+            if (err) {
+              return sendResponse(500, { error: "Error hashing password" });
+            }
+            // Continue with user creation logic
+            console.log("Hashed Password:", hash);
+            // Here you would typically save the user to the database
+            connection.query(
+              "INSERT INTO users (name, email, password_hash, role) VALUES (?, ?, ?, ?)",
+              [data.name, data.email, hash, data.role],
+              (error, results) => {
+                if (error) {
+                  return sendResponse(500, { error: "Error creating user" });
+                }
+                // Get the newly created user
+                connection.query(
+                  "SELECT id, name, email, role FROM users WHERE email = ?",
+                  [data.email],
+                  (selectError, selectResults) => {
+                    if (selectError) {
+                      return sendResponse(500, {
+                        error: "Error fetching user",
+                      });
+                    }
+                    const user = selectResults[0];
+
+                    // Create JWT token
+                    const token = jwt.sign(
+                      {
+                        id: user.id,
+                        email: user.email,
+                        name: user.name,
+                        role: user.role,
+                      },
+                      JWT_SECRET,
+                      { expiresIn: "1d" },
+                    );
+
+                    // Set httpOnly cookie with JWT
+                    res.setHeader(
+                      "Set-Cookie",
+                      `authToken=${encodeURIComponent(token)}; HttpOnly; Max-Age=${24 * 60 * 60}; Path=/; SameSite=Strict`,
+                    );
+
+                    // Send response with redirect URL
+                    sendResponse(201, {
+                      message: "User registered and logged in successfully",
+                      redirect: "/test",
+                      user: {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                      },
+                    });
+                  },
+                );
+              },
+            );
+          });
+        } catch (error) {
+          return sendResponse(500, { error: "Error processing registration" });
+        }
+      } catch (error) {
+        return sendResponse(500, { error: "Database query error" });
+      }
     });
   }
 
@@ -215,6 +278,8 @@ const server = http.createServer(async (req, res) => {
 
   // 8. Routes - TEST PAGE (GET)
   else if (method === "GET" && path === "/test") {
+    console.log("headers", req.headers);
+    console.log("cookies", req.headers.cookie);
     const token = getAuthToken();
     if (!token) {
       res.statusCode = 302;
