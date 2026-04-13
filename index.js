@@ -122,6 +122,54 @@ const server = http.createServer(async (req, res) => {
         res.end(data);
       }
     });
+  } else if (method === "GET" && path === "/donor-dashboard") {
+    console.log("headers", req.headers);
+    console.log("cookies", req.headers.cookie);
+    // Check for auth token in cookies
+    const token = getAuthToken();
+    if (!token) {
+      res.statusCode = 302;
+      res.setHeader("Location", "/");
+      res.end();
+      return;
+    }
+
+    try {
+      // Verify the token and get user info
+      const user = jwt.verify(token, JWT_SECRET);
+      console.log("Verified user", user);
+
+      // Render the test page with user info
+      connection.query(
+        "SELECT * FROM users WHERE id = ?",
+        [user.id],
+        (error, results) => {
+          if (error) {
+            res.statusCode = 500;
+          }
+          if (results.length === 0) {
+            res.statusCode = 401;
+          }
+          const user = results[0];
+          console.log("User from DB", user);
+          ejs.renderFile("./views/test.ejs", { user: user }, (err, html) => {
+            if (err) {
+              console.error("Error rendering template", err);
+              res.statusCode = 500;
+              res.end("<h1>500 - Error rendering template</h1>");
+            } else {
+              res.statusCode = 200;
+              res.setHeader("Content-Type", "text/html");
+              res.end(html);
+            }
+          });
+        },
+      );
+    } catch (error) {
+      res.statusCode = 302;
+      res.setHeader("Location", "/");
+      res.end();
+    }
   }
 
   // 8. Routes - USER REGISTRATION (POST)
@@ -189,16 +237,30 @@ const server = http.createServer(async (req, res) => {
                     );
 
                     // Send response with redirect URL
-                    sendResponse(201, {
-                      message: "User registered and logged in successfully",
-                      redirect: "/test",
-                      user: {
-                        id: user.id,
-                        name: user.name,
-                        email: user.email,
-                        role: user.role,
-                      },
-                    });
+                    // Redirect based on user role
+                    if (user.role === "donor") {
+                      sendResponse(200, {
+                        message: "User logged in successfully",
+                        redirect: "/donor-dashboard",
+                        user: {
+                          id: user.id,
+                          name: user.name,
+                          email: user.email,
+                          role: user.role,
+                        },
+                      });
+                    } else if (user.role === "creator") {
+                      sendResponse(200, {
+                        message: "User logged in successfully",
+                        redirect: "/beneficiary-dashboard",
+                        user: {
+                          id: user.id,
+                          name: user.name,
+                          email: user.email,
+                          role: user.role,
+                        },
+                      });
+                    }
                   },
                 );
               },
@@ -261,6 +323,7 @@ const server = http.createServer(async (req, res) => {
             console.log("Set-Cookie header", res.getHeader("Set-Cookie"));
 
             // Send response with redirect URL
+            // Redirect based on user role
             if (user.role === "admin") {
               sendResponse(200, {
                 message: "User logged in successfully",
@@ -305,7 +368,7 @@ const server = http.createServer(async (req, res) => {
   else if (method === "GET" && path === "/test") {
     console.log("headers", req.headers);
     console.log("cookies", req.headers.cookie);
-    console.log(req);
+    // Check for auth token in cookies
     const token = getAuthToken();
     if (!token) {
       res.statusCode = 302;
@@ -315,27 +378,36 @@ const server = http.createServer(async (req, res) => {
     }
 
     try {
-      jwt.verify(token, JWT_SECRET);
-      ejs.renderFile("./views/test.ejs", {}, (err, html) => {
-        if (err) {
-          res.statusCode = 500;
-          res.end("<h1>500 - Error rendering template</h1>");
-        } else {
-          res.statusCode = 200;
-          res.setHeader("Content-Type", "text/html");
-          res.end(html);
-        }
-      });
-      const filePath = "./views/test.html";
-      fs.readFile(filePath, "utf8", (err, data) => {
-        if (err) {
-          res.statusCode = 404;
-          res.end("<h1>404 - Test Page Not Found</h1>");
-        } else {
-          res.statusCode = 200;
-          res.end(data);
-        }
-      });
+      // Verify the token and get user info
+      const user = jwt.verify(token, JWT_SECRET);
+      console.log("Verified user", user);
+
+      // Render the test page with user info
+      connection.query(
+        "SELECT * FROM users WHERE id = ?",
+        [user.id],
+        (error, results) => {
+          if (error) {
+            res.statusCode = 500;
+          }
+          if (results.length === 0) {
+            res.statusCode = 401;
+          }
+          const user = results[0];
+          console.log("User from DB", user);
+          ejs.renderFile("./views/test.ejs", { user: user }, (err, html) => {
+            if (err) {
+              console.error("Error rendering template", err);
+              res.statusCode = 500;
+              res.end("<h1>500 - Error rendering template</h1>");
+            } else {
+              res.statusCode = 200;
+              res.setHeader("Content-Type", "text/html");
+              res.end(html);
+            }
+          });
+        },
+      );
     } catch (error) {
       res.statusCode = 302;
       res.setHeader("Location", "/");
