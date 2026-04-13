@@ -5,6 +5,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const mysql = require("mysql2");
 const jwt = require("jsonwebtoken");
+const ejs = require("ejs");
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -260,16 +261,40 @@ const server = http.createServer(async (req, res) => {
             console.log("Set-Cookie header", res.getHeader("Set-Cookie"));
 
             // Send response with redirect URL
-            sendResponse(200, {
-              message: "User logged in successfully",
-              redirect: "/test",
-              user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-              },
-            });
+            if (user.role === "admin") {
+              sendResponse(200, {
+                message: "User logged in successfully",
+                redirect: "/admin-dashboard",
+                user: {
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  role: user.role,
+                },
+              });
+            } else if (user.role === "donor") {
+              sendResponse(200, {
+                message: "User logged in successfully",
+                redirect: "/donor-dashboard",
+                user: {
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  role: user.role,
+                },
+              });
+            } else if (user.role === "creator") {
+              sendResponse(200, {
+                message: "User logged in successfully",
+                redirect: "/beneficiary-dashboard",
+                user: {
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  role: user.role,
+                },
+              });
+            }
           });
         },
       );
@@ -280,6 +305,7 @@ const server = http.createServer(async (req, res) => {
   else if (method === "GET" && path === "/test") {
     console.log("headers", req.headers);
     console.log("cookies", req.headers.cookie);
+    console.log(req);
     const token = getAuthToken();
     if (!token) {
       res.statusCode = 302;
@@ -290,7 +316,16 @@ const server = http.createServer(async (req, res) => {
 
     try {
       jwt.verify(token, JWT_SECRET);
-      res.setHeader("Content-Type", "text/html");
+      ejs.renderFile("./views/test.ejs", {}, (err, html) => {
+        if (err) {
+          res.statusCode = 500;
+          res.end("<h1>500 - Error rendering template</h1>");
+        } else {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "text/html");
+          res.end(html);
+        }
+      });
       const filePath = "./views/test.html";
       fs.readFile(filePath, "utf8", (err, data) => {
         if (err) {
