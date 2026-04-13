@@ -82,14 +82,13 @@ const server = http.createServer(async (req, res) => {
   // 10. Routes - HOME PAGE (GET)
   if (method === "GET" && path === "/") {
     res.setHeader("Content-Type", "text/html");
-    const filePath = "./views/fundflow.html";
-    fs.readFile(filePath, "utf8", (err, data) => {
+    ejs.renderFile("./views/home.ejs", {}, (err, html) => {
       if (err) {
-        res.statusCode = 404;
-        res.end("<h1>404 - File Not Found</h1>");
+        res.statusCode = 500;
+        res.end("<h1>500 - Error rendering template</h1>");
       } else {
         res.statusCode = 200;
-        res.end(data);
+        res.end(html);
       }
     });
   }
