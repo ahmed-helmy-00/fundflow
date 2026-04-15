@@ -1,12 +1,23 @@
-const pages = ["home", "features", "pricing", "resources", "contact", "campaigns", "campaign-detail"];
+const pages = [
+  "home",
+  "features",
+  "pricing",
+  "resources",
+  "contact",
+  "campaigns",
+  "campaign-detail",
+];
 
 const campaigns = [
   {
     id: 1,
     name: "Aria — AI Pocket Translator",
-    tagline: "Break language barriers in real time. 100+ languages, offline-first.",
-    description: "Aria is a compact, wearable AI translator that fits on your collar and translates speech in real time — with zero internet required. Built for travelers, expats, and global teams who can't afford to be lost in translation.",
-    image: "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?w=800&q=80",
+    tagline:
+      "Break language barriers in real time. 100+ languages, offline-first.",
+    description:
+      "Aria is a compact, wearable AI translator that fits on your collar and translates speech in real time — with zero internet required. Built for travelers, expats, and global teams who can't afford to be lost in translation.",
+    image:
+      "https://images.unsplash.com/photo-1526378722484-bd91ca387e72?w=800&q=80",
     category: "tech",
     creator: "Miriam Osei",
     raised: 128400,
@@ -20,23 +31,46 @@ const campaigns = [
       { label: "Offline mode & edge inference", done: false },
       { label: "Mass manufacturing & shipping", done: false },
     ],
-    risks: "Supply chain delays for the custom chip we're using could push delivery by 4–6 weeks. We've secured a secondary supplier as backup.",
+    risks:
+      "Supply chain delays for the custom chip we're using could push delivery by 4–6 weeks. We've secured a secondary supplier as backup.",
     updates: [
-      { date: "Apr 5, 2026", title: "Prototype shipped to beta testers!", body: "50 beta units are now in the hands of real travelers across 12 countries. Feedback so far is incredible — we're iterating on the strap design." },
-      { date: "Mar 20, 2026", title: "We crossed 50% funded!", body: "Thanks to our amazing backers, we've hit the halfway mark. Every share helps us get closer to making Aria a reality." },
+      {
+        date: "Apr 5, 2026",
+        title: "Prototype shipped to beta testers!",
+        body: "50 beta units are now in the hands of real travelers across 12 countries. Feedback so far is incredible — we're iterating on the strap design.",
+      },
+      {
+        date: "Mar 20, 2026",
+        title: "We crossed 50% funded!",
+        body: "Thanks to our amazing backers, we've hit the halfway mark. Every share helps us get closer to making Aria a reality.",
+      },
     ],
     reviews: [
-      { name: "Alex T.", rating: 5, text: "Backed this immediately. The demo video alone sold me — this is the future of travel." },
-      { name: "Yuki M.", rating: 5, text: "Finally, a translator that doesn't need Wi-Fi. Perfect for my trips to rural Japan." },
-      { name: "Raj P.", rating: 4, text: "Excited for this. Hoping the accuracy on Hindi dialects is solid." },
+      {
+        name: "Alex T.",
+        rating: 5,
+        text: "Backed this immediately. The demo video alone sold me — this is the future of travel.",
+      },
+      {
+        name: "Yuki M.",
+        rating: 5,
+        text: "Finally, a translator that doesn't need Wi-Fi. Perfect for my trips to rural Japan.",
+      },
+      {
+        name: "Raj P.",
+        rating: 4,
+        text: "Excited for this. Hoping the accuracy on Hindi dialects is solid.",
+      },
     ],
   },
   {
     id: 2,
     name: "Studio 44 — Community Art Space",
     tagline: "A free creative studio for youth in underserved neighborhoods.",
-    description: "Studio 44 is a nonprofit initiative to build a fully equipped art, music, and film studio open to any young person aged 12–24, free of charge. We believe creative expression is a right, not a privilege.",
-    image: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&q=80",
+    description:
+      "Studio 44 is a nonprofit initiative to build a fully equipped art, music, and film studio open to any young person aged 12–24, free of charge. We believe creative expression is a right, not a privilege.",
+    image:
+      "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=800&q=80",
     category: "community",
     creator: "Danielle Voss",
     raised: 54200,
@@ -50,21 +84,36 @@ const campaigns = [
       { label: "Visual arts wing & supply budget", done: false },
       { label: "First year of free youth programs", done: false },
     ],
-    risks: "We're dependent on city zoning approval, which is in progress. Our legal team is confident we'll receive it within 6 weeks.",
+    risks:
+      "We're dependent on city zoning approval, which is in progress. Our legal team is confident we'll receive it within 6 weeks.",
     updates: [
-      { date: "Apr 1, 2026", title: "Lease signed on our dream location!", body: "We've officially locked in the building at 44 Meridian Ave. Construction planning starts next week." },
+      {
+        date: "Apr 1, 2026",
+        title: "Lease signed on our dream location!",
+        body: "We've officially locked in the building at 44 Meridian Ave. Construction planning starts next week.",
+      },
     ],
     reviews: [
-      { name: "Carmen R.", rating: 5, text: "This is exactly what our neighborhood needs. Donated and shared with everyone I know." },
-      { name: "James L.", rating: 5, text: "My daughter would have LOVED something like this growing up. Backing this 100%." },
+      {
+        name: "Carmen R.",
+        rating: 5,
+        text: "This is exactly what our neighborhood needs. Donated and shared with everyone I know.",
+      },
+      {
+        name: "James L.",
+        rating: 5,
+        text: "My daughter would have LOVED something like this growing up. Backing this 100%.",
+      },
     ],
   },
   {
     id: 3,
     name: "SolPack — Solar Backpack",
     tagline: "Charge your devices anywhere on earth. Built for adventurers.",
-    description: "SolPack integrates flexible, ultra-lightweight solar panels directly into the fabric of a 40L hiking backpack. USB-A, USB-C, and wireless charging built in. Weatherproof and ready for any terrain.",
-    image: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=800&q=80",
+    description:
+      "SolPack integrates flexible, ultra-lightweight solar panels directly into the fabric of a 40L hiking backpack. USB-A, USB-C, and wireless charging built in. Weatherproof and ready for any terrain.",
+    image:
+      "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=800&q=80",
     category: "tech",
     creator: "Lars Eriksen",
     raised: 213000,
@@ -78,23 +127,46 @@ const campaigns = [
       { label: "Final materials certification", done: true },
       { label: "Full production run", done: false },
     ],
-    risks: "We're 142% funded — the main risk now is scaling fulfillment. We've partnered with a third-party logistics provider to handle global shipping.",
+    risks:
+      "We're 142% funded — the main risk now is scaling fulfillment. We've partnered with a third-party logistics provider to handle global shipping.",
     updates: [
-      { date: "Apr 8, 2026", title: "142% funded — stretch goal unlocked!", body: "We've unlocked the built-in battery bank. Every backer at $149+ gets it for free." },
-      { date: "Mar 28, 2026", title: "Certifications passed in the EU and US", body: "Our panels are CE and FCC certified. Full compliance achieved ahead of schedule." },
+      {
+        date: "Apr 8, 2026",
+        title: "142% funded — stretch goal unlocked!",
+        body: "We've unlocked the built-in battery bank. Every backer at $149+ gets it for free.",
+      },
+      {
+        date: "Mar 28, 2026",
+        title: "Certifications passed in the EU and US",
+        body: "Our panels are CE and FCC certified. Full compliance achieved ahead of schedule.",
+      },
     ],
     reviews: [
-      { name: "Sophie K.", rating: 5, text: "Used the beta unit on a 2-week Patagonia trip. Charged my phone every single day." },
-      { name: "Tom B.", rating: 5, text: "Quality feels premium. The solar actually works — not a gimmick." },
-      { name: "Nadia O.", rating: 4, text: "Slightly heavier than my usual pack but worth every gram for the charging capability." },
+      {
+        name: "Sophie K.",
+        rating: 5,
+        text: "Used the beta unit on a 2-week Patagonia trip. Charged my phone every single day.",
+      },
+      {
+        name: "Tom B.",
+        rating: 5,
+        text: "Quality feels premium. The solar actually works — not a gimmick.",
+      },
+      {
+        name: "Nadia O.",
+        rating: 4,
+        text: "Slightly heavier than my usual pack but worth every gram for the charging capability.",
+      },
     ],
   },
   {
     id: 4,
     name: "Bloom — Mental Health Journal App",
     tagline: "Guided journaling, mood tracking, and AI-powered insights.",
-    description: "Bloom helps you build a consistent journaling habit with guided prompts, mood check-ins, and gentle AI analysis that spots patterns over time — turning your words into actionable insights about your mental wellbeing.",
-    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80",
+    description:
+      "Bloom helps you build a consistent journaling habit with guided prompts, mood check-ins, and gentle AI analysis that spots patterns over time — turning your words into actionable insights about your mental wellbeing.",
+    image:
+      "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80",
     category: "health",
     creator: "Priya Anand",
     raised: 38900,
@@ -108,21 +180,37 @@ const campaigns = [
       { label: "Therapist integration module", done: false },
       { label: "Community support groups feature", done: false },
     ],
-    risks: "AI analysis accuracy depends on dataset quality. We're working with licensed clinical psychologists to validate all insights before they reach users.",
+    risks:
+      "AI analysis accuracy depends on dataset quality. We're working with licensed clinical psychologists to validate all insights before they reach users.",
     updates: [
-      { date: "Mar 15, 2026", title: "Beta app now live for backers", body: "200 early backers have access to the beta. Retention is at 74% after 30 days — we're thrilled." },
+      {
+        date: "Mar 15, 2026",
+        title: "Beta app now live for backers",
+        body: "200 early backers have access to the beta. Retention is at 74% after 30 days — we're thrilled.",
+      },
     ],
     reviews: [
-      { name: "Marcus H.", rating: 5, text: "The prompts are thoughtful and non-intrusive. This is the first journaling app I've actually stuck with." },
-      { name: "Leila F.", rating: 4, text: "Love the UI. Excited for the AI features to arrive." },
+      {
+        name: "Marcus H.",
+        rating: 5,
+        text: "The prompts are thoughtful and non-intrusive. This is the first journaling app I've actually stuck with.",
+      },
+      {
+        name: "Leila F.",
+        rating: 4,
+        text: "Love the UI. Excited for the AI features to arrive.",
+      },
     ],
   },
   {
     id: 5,
     name: "Chorus — Music Education for All",
-    tagline: "Free instrument lessons and music theory for under-resourced schools.",
-    description: "Chorus partners with public schools that have had their music programs cut to provide weekly in-person instrument lessons, free instrument lending, and a structured music theory curriculum for grades 3–8.",
-    image: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80",
+    tagline:
+      "Free instrument lessons and music theory for under-resourced schools.",
+    description:
+      "Chorus partners with public schools that have had their music programs cut to provide weekly in-person instrument lessons, free instrument lending, and a structured music theory curriculum for grades 3–8.",
+    image:
+      "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=800&q=80",
     category: "education",
     creator: "Nia Williams",
     raised: 72100,
@@ -136,21 +224,37 @@ const campaigns = [
       { label: "Launch in 10 pilot schools", done: false },
       { label: "Year 2 expansion to 30 schools", done: false },
     ],
-    risks: "School board approvals are in progress at 3 of our 10 pilot schools. We expect all approvals by May 2026.",
+    risks:
+      "School board approvals are in progress at 3 of our 10 pilot schools. We expect all approvals by May 2026.",
     updates: [
-      { date: "Apr 3, 2026", title: "First school launch — a huge success!", body: "Our pilot at Lincoln Elementary had 94 students sign up in the first week. The kids are amazing." },
+      {
+        date: "Apr 3, 2026",
+        title: "First school launch — a huge success!",
+        body: "Our pilot at Lincoln Elementary had 94 students sign up in the first week. The kids are amazing.",
+      },
     ],
     reviews: [
-      { name: "David K.", rating: 5, text: "Music education changed my life. This is exactly the kind of initiative that deserves support." },
-      { name: "Amara S.", rating: 5, text: "My kids go to one of the pilot schools. The difference in their enthusiasm is night and day." },
+      {
+        name: "David K.",
+        rating: 5,
+        text: "Music education changed my life. This is exactly the kind of initiative that deserves support.",
+      },
+      {
+        name: "Amara S.",
+        rating: 5,
+        text: "My kids go to one of the pilot schools. The difference in their enthusiasm is night and day.",
+      },
     ],
   },
   {
     id: 6,
     name: "Mural City — Public Art Initiative",
-    tagline: "Commission local artists to transform blank city walls into vibrant murals.",
-    description: "Mural City is a crowdfunded public art program that pays local emerging artists fair rates to design and paint large-scale murals in neighborhoods that have petitioned for them. Every dollar goes directly to artist fees and materials.",
-    image: "https://images.unsplash.com/photo-1551913902-c92207136625?w=800&q=80",
+    tagline:
+      "Commission local artists to transform blank city walls into vibrant murals.",
+    description:
+      "Mural City is a crowdfunded public art program that pays local emerging artists fair rates to design and paint large-scale murals in neighborhoods that have petitioned for them. Every dollar goes directly to artist fees and materials.",
+    image:
+      "https://images.unsplash.com/photo-1551913902-c92207136625?w=800&q=80",
     category: "art",
     creator: "Felix Romero",
     raised: 19800,
@@ -164,13 +268,26 @@ const campaigns = [
       { label: "Materials procurement", done: false },
       { label: "Murals completed & unveiled", done: false },
     ],
-    risks: "Weather delays are the main variable. We've built a 3-week buffer into our timeline for outdoor painting.",
+    risks:
+      "Weather delays are the main variable. We've built a 3-week buffer into our timeline for outdoor painting.",
     updates: [
-      { date: "Mar 30, 2026", title: "Artists selected!", body: "5 incredible local artists have been chosen through an open community vote. Designs will be revealed next week." },
+      {
+        date: "Mar 30, 2026",
+        title: "Artists selected!",
+        body: "5 incredible local artists have been chosen through an open community vote. Designs will be revealed next week.",
+      },
     ],
     reviews: [
-      { name: "Isabella C.", rating: 5, text: "Art makes communities. Proud to be a backer." },
-      { name: "Dev M.", rating: 4, text: "Love the idea. Can't wait to see the final murals." },
+      {
+        name: "Isabella C.",
+        rating: 5,
+        text: "Art makes communities. Proud to be a backer.",
+      },
+      {
+        name: "Dev M.",
+        rating: 4,
+        text: "Love the idea. Can't wait to see the final murals.",
+      },
     ],
   },
 ];
