@@ -81,17 +81,83 @@ const server = http.createServer(async (req, res) => {
 
   // 10. Routes - HOME PAGE (GET)
   if (method === "GET" && path === "/") {
-    res.setHeader("Content-Type", "text/html");
-    const filePath = "./views/fundflow.html";
-    fs.readFile(filePath, "utf8", (err, data) => {
-      if (err) {
-        res.statusCode = 404;
-        res.end("<h1>404 - File Not Found</h1>");
-      } else {
-        res.statusCode = 200;
-        res.end(data);
-      }
-    });
+    const token = getAuthToken();
+    if (!token) {
+      ejs.renderFile("./views/fundflow.ejs", {}, (err, html) => {
+        if (err) {
+          console.error("Error rendering template", err);
+          res.statusCode = 500;
+          res.end("<h1>500 - Error rendering template</h1>");
+        } else {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "text/html");
+          res.end(html);
+        }
+      });
+    }
+
+    try {
+      // Verify the token and get user info
+      const user = jwt.verify(token, JWT_SECRET);
+      console.log("Verified user", user);
+
+      // Render the test page with user info
+      connection.query(
+        "SELECT * FROM users WHERE id = ?",
+        [user.id],
+        (error, results) => {
+          if (error) {
+            res.statusCode = 500;
+          }
+          if (results.length === 0) {
+            res.statusCode = 401;
+          }
+          const user = results[0];
+          console.log("User from DB", user);
+          connection.query("SELECT * FROM campaigns", (Error, campaigns) => {
+            if (Error) {
+              res.statusCode = 500;
+            }
+            if (campaigns.length === 0) {
+              res.statusCode = 401;
+            }
+
+            console.log("Campaigns from DB", campaigns);
+
+            ejs.renderFile(
+              "./views/fundflow.ejs",
+              { user: user, campaigns: campaigns },
+              (err, html) => {
+                if (err) {
+                  console.error("Error rendering template", err);
+                  res.statusCode = 500;
+                  res.end("<h1>500 - Error rendering template</h1>");
+                } else {
+                  res.statusCode = 200;
+                  res.setHeader("Content-Type", "text/html");
+                  res.end(html);
+                }
+              },
+            );
+          });
+        },
+      );
+    } catch (error) {
+      res.statusCode = 302;
+      res.setHeader("Location", "/");
+      res.end();
+    }
+    // res.setHeader("Content-Type", "text/html");
+    // const filePath = "./views/fundflow.html";
+    // fs.readFile(filePath, "utf8", (err, data) => {
+    //   if (err) {
+    //     res.statusCode = 404;
+    //     res.end("<h1>404 - File Not Found</h1>");
+    //   } else {
+    //     res.statusCode = 200;
+    //     res.end(data);
+    //   }
+    // });
   }
 
   // 11. Routes - REGISTRATION PAGE (GET)
@@ -338,7 +404,7 @@ const server = http.createServer(async (req, res) => {
             } else if (user.role === "donor") {
               sendResponse(200, {
                 message: "User logged in successfully",
-                redirect: "/donor-dashboard",
+                redirect: "/",
                 user: {
                   id: user.id,
                   name: user.name,
